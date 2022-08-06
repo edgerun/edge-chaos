@@ -1,3 +1,4 @@
+import abc
 from dataclasses import dataclass
 from typing import Dict
 
@@ -10,3 +11,12 @@ class ChaosCommand:
     name: str
     parameters: Dict
     kind: str
+
+
+class ChaosCommandExecutor(abc.ABC):
+
+    def start_command(self, command: ChaosCommand): ...
+
+    def stop_command(self, command: ChaosCommand): ...
+
+    def stop(self): ...

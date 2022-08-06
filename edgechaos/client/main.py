@@ -16,10 +16,10 @@ def main():
         logger.error('Client is None')
         return
 
-    cmd = ChaosCommand('cpu', {'cores': 1}, 'start')
+    cmd = ChaosCommand('stress-ng', {'cpu': 8}, 'start')
     client.send(cmd)
-    time.sleep(3)
-    cmd = ChaosCommand('cpu', {'cores': 1}, 'stop')
+    time.sleep(5)
+    cmd = ChaosCommand('stress-ng', {'cpu': 8}, 'stop')
     client.send(cmd)
 
 

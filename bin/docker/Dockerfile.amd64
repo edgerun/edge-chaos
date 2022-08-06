@@ -1,5 +1,7 @@
 FROM python:3.9-slim-bullseye
 
+RUN apt update -y
+RUN apt install -y stress-ng
 WORKDIR /home/app/
 RUN mkdir -p /home/app/python
 
