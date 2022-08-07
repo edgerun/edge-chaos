@@ -16,7 +16,7 @@ class RedisChaosClient(ChaosClient):
 
     def send(self, host: str, cmd: ChaosCommand):
         msg = ChaosCommand.to_json(cmd)
-        channel = 'edgerun/%s' % host
+        channel = 'edgechaos/%s' % host
         logger.info(f'Client publishes on {channel}, command: {msg}')
         self.rds.publish(channel, msg)
 
