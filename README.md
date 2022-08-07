@@ -1,5 +1,10 @@
 # Edge Chaos
 
+![Docker Image Version (latest semver)](https://img.shields.io/docker/v/edgerun/edge-chaos?color=blue&label=Docker%20version&sort=semver)
+[![PyPI Version](https://badge.fury.io/py/edgerun-edge-chaos.svg)](https://badge.fury.io/py/edgerun-edge-chaos)
+[![Python 3.7+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+
+
 This project's aim is to cause chaos in edge-cloud environments.
 
 Users can start and stop programs that should disrupt co-located applications.
