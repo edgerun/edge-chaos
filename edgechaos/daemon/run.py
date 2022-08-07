@@ -13,8 +13,13 @@ logging.basicConfig(level=os.environ.get('edgechaos_logging_level', 'INFO'))
 logger = logging.getLogger(__name__)
 
 
-def signal_handler(sig, frame):
+def sigint_handler(sig, frame):
     logger.info('SIGINT received...')
+    raise KeyboardInterrupt()
+
+
+def sigterm_handler(sig, frame):
+    logger.info('SIGTERM received...')
     raise KeyboardInterrupt()
 
 
@@ -29,7 +34,8 @@ def init_chaos_executors() -> Dict[str, ChaosCommandExecutor]:
 def main():
     listener = create_listener()
 
-    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGINT, sigint_handler)
+    signal.signal(signal.SIGTERM, sigterm_handler)
 
     if listener is None:
         logger.error(f'Unknown listener type `{os.environ.get("edgechaos_listener_type")}` set')
