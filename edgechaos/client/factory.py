@@ -6,7 +6,7 @@ from edgechaos.client.rds import RedisChaosClient
 
 
 def create_client() -> Optional[ChaosClient]:
-    client_type = os.environ.get('chaosedge_client_type')
+    client_type = os.environ.get('edgechaos_client_type')
     if client_type == 'redis':
         return RedisChaosClient.from_env()
     else:
