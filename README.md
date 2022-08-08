@@ -72,9 +72,9 @@ Start the attack:
 
 ```json
 {
-  "name": "cpu",
+  "name": "stress-ng",
   "parameters": {
-    "cores": 1
+    "cpu": 1
   },
   "kind": "start"
 }
@@ -84,9 +84,9 @@ And stop it:
 
 ```json
 {
-  "name": "cpu",
+  "name": "stress-ng",
   "parameters": {
-    "cores": 1
+    "cpu": 1
   },
   "kind": "stop"
 }
