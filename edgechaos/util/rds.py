@@ -3,6 +3,8 @@ import os
 
 import redis
 
+from edgechaos.util.env import read_host_env
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,10 +26,5 @@ def redis_from_env():
 
 
 def read_channel():
-    edgechaos_host = os.environ.get('edgechaos_host')
-
-    if edgechaos_host is None:
-        logger.info('edgechaos_host env variable not set, default to HOSTNAME')
-        edgechaos_host = os.environ.get('HOSTNAME')
-
+    edgechaos_host = read_host_env()
     return f'edgechaos/{edgechaos_host}'
