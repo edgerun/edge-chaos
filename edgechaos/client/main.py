@@ -10,17 +10,21 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    logger.info('Start client')
-    client = create_client()
-    if client is None:
-        logger.error('Client is None')
-        return
+    client = None
+    try:
+        logger.info('Start client')
+        client = create_client()
+        if client is None:
+            logger.error('Client is None')
+            return
 
-    target_host = 'freyr'
-    interface = 'lo'
+        target_host = 'freyr'
+        interface = 'lo'
 
-    test_tc_add_remove_latency(client, target_host, interface)
-
+        test_tc_add_remove_latency(client, target_host, interface)
+    finally:
+        if client is not None:
+            client.stop()
 
 def test_tc_add_remove_latency(client, target_host, interface):
     start_tc_params = [

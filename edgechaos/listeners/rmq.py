@@ -16,17 +16,18 @@ POISON_PILL = 'STOP'
 
 class RabbitMqChaosCommandListener(ChaosCommandListener):
 
-    def __init__(self, exchange: str, routing_key: str, queue_name: str, connection: pika.BlockingConnection):
+    def __init__(self, exchange: str, routing_key: str, queue_name: str, channel, connection: pika.BlockingConnection):
         self.exchange = exchange
         self.routing_key = routing_key
         self.queue_name = queue_name
         self.connection = connection
+        self.channel = channel
         self.running = True
 
     def listen(self) -> Generator[ChaosCommand, None, None]:
         channel = None
         try:
-            channel = self.connection.channel()
+            channel = self.channel
 
             for method_frame, properties, body in channel.consume(queue=self.queue_name, auto_ack=True):
                 logger.debug(f'Got message: {body}')
@@ -41,22 +42,31 @@ class RabbitMqChaosCommandListener(ChaosCommandListener):
         except Exception as e:
             logger.error(f'Listening failed', e)
         finally:
+            logger.info('Closing RabbitMqChaosCommandListener')
             if channel is not None:
                 channel.close()
             self.connection.close()
 
     def stop(self):
         try:
-            self.connection.channel().basic_publish(self.exchange, self.routing_key, bytes(POISON_PILL))
+            self.channel.basic_publish(self.exchange, self.routing_key, bytes(POISON_PILL))
         except Exception as e:
-            logger.error('Error happened during stop', e)
+            logger.error(e)
 
     @staticmethod
     def from_env():
         logging.getLogger("pika").setLevel(logging.WARNING)
-        connection = connection_from_env()
-        edgechaos_host = read_host_env()
-        exchange = os.environ.get('edgechaos_rabbitmq_exchange', 'edgechaos')
-        try_setup_exchange(connection, exchange)
-        queue_name = try_setup_queue(connection, exchange, edgechaos_host)
-        return RabbitMqChaosCommandListener(exchange, edgechaos_host, queue_name, connection)
+        connection = None
+        channel = None
+        try:
+            connection = connection_from_env()
+            channel = connection.channel()
+            edgechaos_host = read_host_env()
+            exchange = os.environ.get('edgechaos_rabbitmq_exchange', 'edgechaos')
+            try_setup_exchange(channel, exchange)
+            queue_name = try_setup_queue(channel, exchange, edgechaos_host)
+            return RabbitMqChaosCommandListener(exchange, edgechaos_host, queue_name, channel, connection)
+        except Exception as e:
+            logger.error('Error during instantiating RabbitMqChaosCommandListener from env', e)
+            channel.close()
+            connection.close()

@@ -20,6 +20,10 @@ class RedisChaosClient(ChaosClient):
         logger.info(f'Client publishes on {channel}, command: {msg}')
         self.rds.publish(channel, msg)
 
+    def stop(self):
+        logger.info('Stop RedisChaosClient')
+        self.rds.close()
+
     @staticmethod
     def from_env():
         return RedisChaosClient(redis_from_env())

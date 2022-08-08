@@ -16,24 +16,17 @@ def connection_from_env():
     return connection
 
 
-def try_setup_exchange(connection: pika.BlockingConnection, exchange: str):
-    channel = None
+def try_setup_exchange(channel, exchange: str):
     try:
-        channel = connection.channel()
         channel.exchange_declare(exchange=exchange, exchange_type='topic')
         logger.debug(f'Declared topic  exchange {exchange}')
     except Exception as e:
         logger.error('Error during setting up exchange', e)
         raise e
-    finally:
-        if channel is not None:
-            channel.close()
 
 
-def try_setup_queue(connection: pika.BlockingConnection, exchange: str, host: str):
-    channel = None
+def try_setup_queue(channel, exchange: str, host: str):
     try:
-        channel = connection.channel()
         result = channel.queue_declare('', exclusive=True)
         queue_name = result.method.queue
         channel.queue_bind(
@@ -43,6 +36,3 @@ def try_setup_queue(connection: pika.BlockingConnection, exchange: str, host: st
     except Exception as e:
         logger.error('Error during setting up queue', e)
         raise e
-    finally:
-        if channel is not None:
-            channel.close()

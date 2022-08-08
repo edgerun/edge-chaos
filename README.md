@@ -202,8 +202,8 @@ Environment variables
 | edgechaos_redis_host        | `localhost` | Redis host                                                                                         |
 | edgechaos_redis_port        | `6379`      | Redis port                                                                                         |
 | edgechaos_redis_password    | N/A         | Redis password                                                                                     |
-| edgechaos_listener_type     | `redis`     | Listener type (currently supported: `redis`)
-| edgechaos_client_type       | `redis`     | Client type (currently supported: `redis`)
+| edgechaos_listener_type     | `redis`     | Listener type (currently supported: `redis`, `rabbitmq`)
+| edgechaos_client_type       | `redis`     | Client type (currently supported: `redis`, `rabbitmq`)
 | edgechaos_host              | $HOSTNAME   | Hostname, determines the channel the daemon listens to                                             |
 | edgechaos_rabbitmq_url      | N/A         | [RabbitMq connection url](https://pika.readthedocs.io/en/stable/examples/using_urlparameters.html) |
 | edgechaos_rabbitmq_exchange | `edgechaos`  | Used as name for the exchange to use for attacks                                                   |
