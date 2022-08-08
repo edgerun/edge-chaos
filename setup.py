@@ -13,7 +13,7 @@ with open("requirements.txt", "r") as fh:
 
 setuptools.setup(
     name="edgerun-edge-chaos",
-    version="0.0.2",
+    version="0.0.3",
     author="Philipp Raith",
     author_email="p.raith@dsg.tuwien.ac.at",
     description="Edge Chaos",
