@@ -31,6 +31,8 @@ class ProcessManager():
 
     def stop(self):
         logger.info('ProcessManager stops and kills all remaining processes...')
-        for value in self.processes:
-            value.kill()
-
+        for key, value in self.processes.items():
+            try:
+                value.kill()
+            except Exception as e:
+                logger.error(f'Error during killing process {key}', e)
