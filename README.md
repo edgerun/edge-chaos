@@ -116,6 +116,74 @@ The content of the `parameter` will be passed onto stress-ng, though it is not n
 ```
 Note that in the example attack, `0` indicates that stress-ng should use all available cores.
 
+
+### tc
+
+[tc](https://man7.org/linux/man-pages/man8/tc.8.html) is a Linux traffic shaping tool that can modify the traffic on
+network interfaces.
+[This wiki entry](https://wiki.linuxfoundation.org/networking/netem) offers a quick look  into the capabilities of `tc`.
+As before with `stress-ng`, we do not want to limit users in their chaos attack configuration and thus just pass on
+any parameter to `tc`.
+
+In contrast to `stress-ng` attacks, each attack needs to be manually stopped.
+That means that the edge-chaos agent does not modify the parameters and just passes on parameters.
+To stop the modification, it is necessary to send the correct `tc` command (see down below for an example)
+and that the `kind` key is set to `stop`.
+
+**Important:** Manually stopping `tc` commands means that the edge-chaos agent does not stop executed commands on shutdown.
+Every set `tc` rule has to be manually deleted.
+
+Further, because `tc` expects a list of parameters rather than flags, we expect the `parameters` object to have
+a single key (`tc`) which value is a list of strings that is passed on, without modification, to the `tc` command.
+
+For example, to add a 100ms delay on the egress of the `eth0` network interface, send:
+
+```json
+{
+   "name": "tc",
+   "parameters": {
+      "tc":[
+         "qdisc",
+         "add",
+         "dev",
+         "eth0",
+         "root",
+         "netem",
+         "delay",
+         "100ms"
+      ]
+   },
+   "kind": "start"
+}
+```
+
+And to remove the `tc` rule, send:
+
+```json
+{
+   "name": "tc",
+   "parameters": {
+      "tc":[
+         "qdisc",
+         "del",
+         "dev",
+         "eth0",
+         "root",
+         "netem",
+         "delay",
+         "100ms"
+      ]
+   },
+   "kind": "stop"
+}
+```
+
+**Note** that the value of `kind` has **no** influence on the command.
+However, it is recommended to set it appropriately for post-attack analysis.
+
+
+
+
 Environment variables
 =====================
 

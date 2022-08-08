@@ -6,6 +6,7 @@ from typing import Dict
 from edgechaos.daemon.core import EdgeChaosDaemon
 from edgechaos.executor.api import ChaosCommandExecutor
 from edgechaos.executor.stressng import StressNgCommandExecutor
+from edgechaos.executor.tc import TcCommandExecutor
 from edgechaos.listeners.factory import create_listener
 from edgechaos.util.process import ProcessManager
 
@@ -26,8 +27,10 @@ def sigterm_handler(sig, frame):
 def init_chaos_executors() -> Dict[str, ChaosCommandExecutor]:
     proc_manager = ProcessManager()
     stress_ng_executor = StressNgCommandExecutor(proc_manager)
+    tc_executor = TcCommandExecutor()
     return {
-        'stress-ng': stress_ng_executor
+        'stress-ng': stress_ng_executor,
+        'tc': tc_executor
     }
 
 
@@ -42,6 +45,7 @@ def main():
         return
 
     chaos_executors = init_chaos_executors()
+    logger.info(f'Registered following chaos command executors: {list(chaos_executors.keys())}')
     chaos_daemon = EdgeChaosDaemon(listener, chaos_executors)
     try:
         chaos_daemon.run()

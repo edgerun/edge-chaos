@@ -2,6 +2,8 @@ FROM python:3.9-slim-bullseye
 
 RUN apt update -y
 RUN apt install -y stress-ng
+RUN apt install -y iproute2
+
 WORKDIR /home/app/
 RUN mkdir -p /home/app/python
 

@@ -22,9 +22,12 @@ class ProcessManager():
 
     def kill_process(self, args: List[str]):
         key = convert_args_to_key(args)
-        logger.debug(f'Kill process: {key}')
-        self.processes[key].kill()
-        del self.processes[key]
+        try:
+            logger.debug(f'Kill process: {key}')
+            self.processes[key].kill()
+            del self.processes[key]
+        except AttributeError as e:
+            logger.warning(f"Error happened when trying to kill 'stress-ng {key}'", e)
 
     def stop(self):
         logger.info('ProcessManager stops and kills all remaining processes...')
