@@ -51,7 +51,7 @@ Currently, commands are expected to arrive via Redis Pub/Sub or via AMQP (i.e., 
 Supported **interaction**:
 
 * **Redis**: the daemon waits for messages published via the channel `edgechaos/$edgechaos_host`.
-* **RabbitMq**: the daemon watis for messages published on the exchange `edgechaos` with the routing key `$edgechaos_host.
+* **RabbitMq**: the daemon watis for messages published on the exchange `edgechaos` with the routing key `$edgechaos_host`.
 
 Whereas `$edgechaos_host` is set as environment variable and defaults to the `HOSTNAME`.
 
